@@ -4,6 +4,9 @@ import HomePage from "./components/HomePage.js";
 import Movies from "./components/Movies/Movies.js";
 import Admin from "./components/Admin/Admin.js";
 import User from "./components/User/User.js";
+import UserProfile from "./components/Profile/UserProfile.js";
+import AdminProfile from "./components/Profile/AdminProfile.js";
+import AddMovie from "./components/Movies/AddMovie.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { adminActions, userActions } from "./components/Store/index.js";
@@ -69,6 +72,18 @@ function App() {
             element={<User setSelectedTab={setSelectedTab} />}
           />
           <Route
+            path="/Booking"
+            element={<UserProfile setSelectedTab={setSelectedTab} />}
+          />
+          <Route
+            path="/AddMovie"
+            element={<AddMovie setSelectedTab={setSelectedTab} />}
+          />
+          <Route
+            path="/AdminProfile"
+            element={<AdminProfile setSelectedTab={setSelectedTab} />}
+          />
+          <Route
             path="/Booking/:id"
             element={
               <Booking
@@ -82,5 +97,37 @@ function App() {
     </div>
   );
 }
+// return (
+//   <div>
+//     <Header />
+//     <section>
+//       <Routes>
+//         <Route path="/Home" element={<HomePage />} />
+//         <Route path="/Movies" element={<Movies />} />
+//         {!isUserLoggedIn && !isAdminLoggedIn && (
+//           <>
+//             {" "}
+//             <Route path="/admin" element={<Admin />} />
+//             <Route path="/user" element={<User />} />
+//           </>
+//         )}
+//         {isUserLoggedIn && !isAdminLoggedIn && (
+//           <>
+//             {" "}
+//             <Route path="/user" element={<UserProfile />} />
+//             <Route path="/bookings/:id" element={<Booking />} />
+//           </>
+//         )}
+//         {isAdminLoggedIn && !isUserLoggedIn && (
+//           <>
+//             {" "}
+//             <Route path="/add" element={<AddMovie />} />
+//             <Route path="/admin" element={<AdminProfile />} />{" "}
+//           </>
+//         )}
+//       </Routes>
+//     </section>
+//   </div>
+// );
 
 export default App;
