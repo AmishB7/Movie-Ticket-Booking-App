@@ -4,7 +4,7 @@ import {
   deleteBooking,
   getUserBooking,
   getUserDetails,
-} from "../api-helpers/api-helpers";
+} from "../../api-helpers/api-helpers.js";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   IconButton,
@@ -74,6 +74,7 @@ const UserProfile = () => {
               fontFamily={"verdana"}
               textAlign="center"
               padding={2}
+              color={"red"}
             >
               Bookings
             </Typography>
@@ -102,6 +103,11 @@ const UserProfile = () => {
                       sx={{ margin: 1, width: "auto", textAlign: "left" }}
                     >
                       Seat: {booking.seatNumber}
+                    </ListItemText>
+                    <ListItemText
+                      sx={{ margin: 1, width: "auto", textAlign: "left" }}
+                    >
+                      Price: {booking.ticketPrice}
                     </ListItemText>
                     <ListItemText
                       sx={{ margin: 1, width: "auto", textAlign: "left" }}

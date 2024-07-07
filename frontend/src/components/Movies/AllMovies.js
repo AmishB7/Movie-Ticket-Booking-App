@@ -32,6 +32,7 @@ const AllMovies = () => {
               releaseDate={movie.releaseDate}
               posterUrl={movie.posterUrl}
               description={movie.description}
+              ticketPrice={movie.ticketPrice}
               key={index}
             />
           ))}
