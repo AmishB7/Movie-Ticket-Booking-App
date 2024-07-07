@@ -130,7 +130,7 @@ const Header = ({ selectedTab, handleTabChange }) => {
                 />,
                 <Tab key="About" component={Link} to="/About" label="About" />,
                 <Tab
-                  key="Booking"
+                  key="bookings"
                   component={Link}
                   to="/Booking"
                   label="Booking"
@@ -147,13 +147,13 @@ const Header = ({ selectedTab, handleTabChange }) => {
                 <Tab
                   key="admin"
                   component={Link}
-                  to="/Aprofile"
+                  to="/AdminProfile"
                   label="Admin"
                 />,
                 <Tab
                   key="Add Movie"
                   component={Link}
-                  to="/"
+                  to="/AddMovie"
                   label="Add Movie"
                 />,
               ]}
@@ -221,7 +221,7 @@ const Header = ({ selectedTab, handleTabChange }) => {
                 </Button>
               </Tooltip>
             )}
-            {!isUserLoggedIn && (
+            {!isUserLoggedIn && !isAdminLoggedIn && (
               <Button
                 component={Link}
                 to="/User"

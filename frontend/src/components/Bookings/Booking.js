@@ -1,25 +1,49 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMovieDetails } from "../../api-helpers/api-helpers";
+import { getMovieDetails, newBooking } from "../../api-helpers/api-helpers";
 import { Typography, Box, FormLabel, TextField, Button } from "@mui/material";
 
 const Booking = () => {
   const [movie, setMovie] = useState();
   const [inputs, setInputs] = useState({ seatNumber: "", date: "" });
   const { id } = useParams();
-  console.log(id);
+
   useEffect(() => {
     getMovieDetails(id)
-      .then((res) => setMovie(res.movie))
+      .then((res) => {
+        console.log("Movie Details:", res.movie);
+        setMovie(res.movie);
+      })
       .catch((err) => console.log(err));
   }, [id]);
-  console.log(movie);
+
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (movie && movie.ticketPrice) {
+      const bookingData = {
+        movie: movie._id,
+        seatNumber: inputs.seatNumber,
+        date: inputs.date,
+        price: movie.ticketPrice,
+      };
+
+      console.log("Booking Data:", bookingData);
+
+      newBooking(bookingData)
+        .then((res) => console.log("Booking Response:", res))
+        .catch((err) => console.log(err));
+    } else {
+      console.log("Movie or ticket price is not available");
+    }
+  };
+
   return (
     <div>
       {movie && (
@@ -60,10 +84,13 @@ const Booking = () => {
                 <Typography fontWeight={"bold"} marginTop={1}>
                   Release Date : {new Date(movie.releaseDate).toDateString()}
                 </Typography>
+                <Typography fontWeight={"bold"} marginTop={1}>
+                  Ticket Price : {movie.ticketPrice}
+                </Typography>
               </Box>
             </Box>
             <Box width={"50%"} paddingTop={"10px"}>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <Box
                   padding={8}
                   margin={"auto"}
@@ -128,7 +155,6 @@ const Booking = () => {
                       // Label
                       "& .MuiInputLabel-standard": {
                         color: "#FAF9F6",
-
                         "&.Mui-focused": {
                           color: "#FAF9F6",
                         },

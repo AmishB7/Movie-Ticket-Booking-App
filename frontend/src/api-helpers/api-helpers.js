@@ -56,11 +56,12 @@ export const getMovieDetails = async (id) => {
 
 export const newBooking = async (data) => {
   const res = await axios
-    .post("/booking", {
+    .post("/bookings", {
       movie: data.movie,
       seatNumber: data.seatNumber,
       date: data.date,
       user: localStorage.getItem("UserID"),
+      ticketPrice: data.ticketPrice,
     })
     .catch((err) => console.log(err));
 
@@ -86,7 +87,7 @@ export const getUserBooking = async () => {
 
 export const deleteBooking = async (id) => {
   const res = await axios
-    .delete(`/booking/${id}`)
+    .delete(`/bookings/${id}`)
     .catch((err) => console.log(err));
 
   if (res.status !== 200) {
@@ -117,8 +118,9 @@ export const addMovie = async (data) => {
         releaseDate: data.releaseDate,
         posterUrl: data.posterUrl,
         fetaured: data.fetaured,
-        actors: data.actors,
+        cast: data.cast,
         admin: localStorage.getItem("adminID"),
+        ticketPrice: data.ticketPrice,
       },
       {
         headers: {
