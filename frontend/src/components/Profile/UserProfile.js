@@ -15,7 +15,6 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { blue } from "@mui/material/colors";
 
 const UserProfile = () => {
   const [bookings, setBookings] = useState([]);
