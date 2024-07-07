@@ -7,7 +7,6 @@ import User from "./components/User/User.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { adminActions, userActions } from "./components/Store/index.js";
-import Footer from "./components/Footer.js";
 import Booking from "./components/Bookings/Booking.js";
 
 function App() {
@@ -37,7 +36,6 @@ function App() {
       }}
     >
       <Header selectedTab={selectedTab} handleTabChange={handleTabChange} />{" "}
-      {/* Pass state and handler to Header */}
       <section>
         <Routes>
           <Route
@@ -49,7 +47,6 @@ function App() {
               />
             }
           />{" "}
-          {/* Pass handler to HomePage */}
           <Route
             path="/Home"
             element={
@@ -59,7 +56,6 @@ function App() {
               />
             }
           />{" "}
-          {/* Pass handler to HomePage */}
           <Route
             path="/Movies"
             element={<Movies setSelectedTab={setSelectedTab} />}
@@ -79,11 +75,10 @@ function App() {
                 setSelectedTab={setSelectedTab}
                 handleTabChange={handleTabChange}
               />
-            } // Pass the handler to Booking component
+            }
           />
         </Routes>
       </section>
-      <Footer />
     </div>
   );
 }

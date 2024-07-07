@@ -11,25 +11,29 @@ dotenv.config();
 const app = express();
 // Enable CORS for all routes
 const corsOptions = {
-    origin: 'http://localhost:3000', // Allow requests from localhost:3000
-  };
-  
-  app.use(cors(corsOptions));
+  origin: "http://localhost:3000", // Allow requests from localhost:3000
+};
+
+app.use(cors(corsOptions));
 
 //middleswares
 app.use(express.json());
 app.use("/user", UserRouter);
-app.use("/admin",adminRouter);
-app.use("/movie",movieRouter);
+app.use("/admin", adminRouter);
+app.use("/movie", movieRouter);
 app.use("/bookings", bookingsRouter);
 
+const PORT = process.env.PORT || 5000;
 
-const PORT = process.env.PORT || 5000 ;
-
-mongoose.connect(`mongodb+srv://amish:${process.env.MONGODB_PASSWORD}@cluster0.okokgc6.mongodb.net/?retryWrites=true&w=majority`)
-.then(()=>
-app.listen(PORT,()=>
-console.log(`Connected to database ${mongoose.connection.host} and server is running on ${PORT}`)
-)).catch((e) => console.log(e));
-
-  
+mongoose
+  .connect(
+    `mongodb+srv://amish:${process.env.MONGODB_PASSWORD}@cluster0.okokgc6.mongodb.net/?retryWrites=true&w=majority`
+  )
+  .then(() =>
+    app.listen(PORT, () =>
+      console.log(
+        `Connected to database ${mongoose.connection.host} and server is running on ${PORT}`
+      )
+    )
+  )
+  .catch((e) => console.log(e));
