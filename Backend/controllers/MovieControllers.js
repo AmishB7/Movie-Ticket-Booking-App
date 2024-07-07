@@ -1,24 +1,40 @@
-import Jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import Movie from "../models/Movies.js";
 import mongoose from "mongoose";
 import Admin from "../models/Admin.js";
 
+const handleError = (res, err, message, status = 500) => {
+  console.error(err);
+  return res.status(status).json({ message });
+};
+
+/**
+ * Adds a new movie to the database.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the movie is added successfully, or rejects with an error.
+ */
 export const addMovie = async (req, res, next) => {
-  const extractedToken = req.headers.authorization.split(" ")[1];
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(404).json({ message: "Token Not Found" });
+  }
+
+  const extractedToken = authHeader.split(" ")[1];
   if (!extractedToken || extractedToken.trim() === "") {
-    return res.status(404).json({ message: "Token Not found" });
+    return res.status(404).json({ message: "Token Not Found" });
   }
 
   let adminId;
-  // Verify token
   try {
-    const decrypted = Jwt.verify(extractedToken, process.env.SECRET_KEY);
+    const decrypted = jwt.verify(extractedToken, process.env.SECRET_KEY);
     adminId = decrypted.id;
   } catch (err) {
     return res.status(400).json({ message: `${err.message}` });
   }
 
-  // Create new movie
   const {
     title,
     cast,
@@ -29,28 +45,24 @@ export const addMovie = async (req, res, next) => {
     trailerUrl,
     ticketPrice,
   } = req.body;
+
   if (
-    !title.trim() ||
-    !cast.trim() ||
-    !description.trim() ||
-    !duration.trim() ||
-    !releaseDate.trim() ||
-    !posterUrl.trim() ||
-    !ticketPrice.trim()
+    !title || !cast || !description || !duration ||
+    !releaseDate || !posterUrl || !ticketPrice ||
+    title.trim() === "" || cast.trim() === "" ||
+    description.trim() === "" || duration.trim() === "" ||
+    releaseDate.trim() === "" || posterUrl.trim() === "" ||
+    ticketPrice.trim() === ""
   ) {
-    return res.status(402).json({ message: "Invalid Inputs" });
-  }
-  let existingMovie;
-  try {
-    existingMovie = await Movie.findOne({ title });
-  } catch (err) {
-    return console.log(err);
-  }
-  if (existingMovie) {
-    return res.status(400).json({ message: "Movie Already Added !" });
+    return res.status(422).json({ message: "Invalid Inputs" });
   }
 
   try {
+    const existingMovie = await Movie.findOne({ title });
+    if (existingMovie) {
+      return res.status(400).json({ message: "Movie Already Added!" });
+    }
+
     const movie = new Movie({
       title,
       cast,
@@ -70,38 +82,51 @@ export const addMovie = async (req, res, next) => {
     adminUser.addedMovies.push(movie);
     await adminUser.save({ session });
     await session.commitTransaction();
-    return res.status(200).json({ message: "Movie added successfully", movie });
+
+    return res.status(200).json({ message: "Movie Added Successfully", movie });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Request failed" });
+    return handleError(res, error, "Request Failed");
   }
 };
 
+/**
+ * Retrieves all movies from the database.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<Object>} A promise that resolves to the response object with the movies data or an error message.
+ */
 export const getAllMovies = async (req, res, next) => {
-  let movies;
-
   try {
-    movies = await Movie.find();
+    const movies = await Movie.find();
+    if (!movies || movies.length === 0) {
+      return res.status(404).json({ message: "No Movies Found" });
+    }
+    return res.status(200).json({ movies });
   } catch (err) {
-    return console.log(err);
+    return handleError(res, err, "Request Failed");
   }
-  if (!movies) {
-    return res.status(500).json({ message: "Request Failed" });
-  }
-  return res.status(200).json({ movies });
 };
 
-export const getMoviesById = async (req, res, next) => {
-  let id, movie;
-  id = req.params.id;
-  try {
-    movie = await Movie.findById(id);
-  } catch (err) {
-    return console.log(err);
-  }
-  if (!id) {
-    return res.status(500).json({ message: "Request Failed" });
-  }
+/**
+ * Retrieves a movie by its ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<Object>} The movie object if found, or an error response.
+ */
+export const getMovieById = async (req, res, next) => {
+  const { id } = req.params;
 
-  return res.status(200).json({ movie });
+  try {
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie Not Found" });
+    }
+    return res.status(200).json({ movie });
+  } catch (err) {
+    return handleError(res, err, "Request Failed");
+  }
 };
