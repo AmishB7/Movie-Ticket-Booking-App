@@ -23,7 +23,7 @@ app.use("/admin", adminRouter);
 app.use("/movie", movieRouter);
 app.use("/bookings", bookingsRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 
 mongoose
   .connect(
