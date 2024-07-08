@@ -15,8 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CryptoJS from "crypto-js"; // Import CryptoJS library
-import { v4 as uuidv4 } from 'uuid'; // Import UUIDv4 from uuid package
+import CryptoJS from "crypto-js";
+import { v4 as uuidv4 } from 'uuid';
 
 const UserProfile = () => {
   const [bookings, setBookings] = useState([]);
