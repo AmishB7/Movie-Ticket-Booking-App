@@ -19,7 +19,7 @@ const bookingSchema = new mongoose.Schema({
         ref : "User",
         required: true,
     },
-    price:{
+    ticketPrice:{
         type: Number,
         required: true,
     },

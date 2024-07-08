@@ -1,9 +1,9 @@
 import express from "express";
-import { addMovie, getAllMovies, getMoviesById } from "../controllers/MovieControllers.js";
+import { addMovie, getAllMovies, getMovieById } from "../controllers/MovieControllers.js";
 
 const movieRouter = express.Router();
 
-movieRouter.get("/:id", getMoviesById);
+movieRouter.get("/:id", getMovieById);
 movieRouter.get("/", getAllMovies);
 movieRouter.post("/", addMovie);
 

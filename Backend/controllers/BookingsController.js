@@ -55,11 +55,11 @@ export const newBooking = async (req, res, next) => {
       seatNumber,
     });
 
-    if (existingBooking) {
-      return res
-        .status(400)
-        .json({ message: "Booking already exists for this movie, date, and seat number" });
-    }
+    // if (existingBooking) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Booking already exists for this movie, date, and seat number" });
+    // }
 
     const booking = new Bookings({
       movie,
@@ -69,19 +69,14 @@ export const newBooking = async (req, res, next) => {
       ticketPrice,
     });
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     existingUser.bookings.push(booking);
     movieExists.bookings.push(booking);
 
     await Promise.all([
-      existingUser.save({ session }),
-      movieExists.save({ session }),
-      booking.save({ session }),
+      existingUser.save(),
+      movieExists.save(),
+      booking.save(),
     ]);
-
-    await session.commitTransaction();
 
     return res.status(201).json({ booking });
 
@@ -133,22 +128,17 @@ export const deleteBooking = async (req, res, next) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     if (booking.user) {
       booking.user.bookings.pull(booking);
-      await booking.user.save({ session });
+      await booking.user.save();
     }
 
     if (booking.movie) {
       booking.movie.bookings.pull(booking);
-      await booking.movie.save({ session });
+      await booking.movie.save();
     }
 
-    await booking.remove({ session });
-
-    await session.commitTransaction();
+    await booking.remove();
 
     return res.status(200).json({ message: "Successfully Deleted" });
 

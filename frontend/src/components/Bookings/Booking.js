@@ -31,14 +31,16 @@ const Booking = () => {
         movie: movie._id,
         seatNumber: inputs.seatNumber,
         date: inputs.date,
-        price: movie.ticketPrice,
+        ticketPrice: movie.ticketPrice,
       };
 
-      console.log("Booking Data:", bookingData);
-
       newBooking(bookingData)
-        .then((res) => console.log("Booking Response:", res))
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .then((res) => {
+          console.log("Booking Response:", res);
+          // Redirect to user profile page after booking
+          window.location.href = "/booking";
+        });
     } else {
       console.log("Movie or ticket price is not available");
     }
