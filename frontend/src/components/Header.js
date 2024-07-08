@@ -214,6 +214,7 @@ const Header = ({ selectedTab, handleTabChange }) => {
                       color: "#fff",
                     },
                   }}
+                  onClick={() => Logout(true)}
                   startIcon={<LogoutIcon />}
                 >
                   {" "}

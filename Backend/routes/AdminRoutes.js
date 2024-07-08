@@ -1,13 +1,19 @@
-import express from 'express';
-import { adminLogin, adminSignup, getAllAdmin } from '../controllers/AdminControllers.js';
+import express from "express";
+import {
+  adminLogin,
+  adminSignup,
+  getAllAdmin,
+  getAdminById,
+} from "../controllers/AdminControllers.js";
 
 const adminRouter = express.Router();
 
-adminRouter.post("/signup",adminSignup);
+adminRouter.post("/signup", adminSignup);
 
-adminRouter.post("/login",adminLogin);
+adminRouter.post("/login", adminLogin);
 
 adminRouter.get("/", getAllAdmin);
 
-export default adminRouter;
+adminRouter.get("/:id", getAdminById);
 
+export default adminRouter;

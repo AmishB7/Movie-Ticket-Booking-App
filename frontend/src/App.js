@@ -7,6 +7,8 @@ import User from "./components/User/User.js";
 import UserProfile from "./components/Profile/UserProfile.js";
 import AdminProfile from "./components/Profile/AdminProfile.js";
 import AddMovie from "./components/Movies/AddMovie.js";
+import Success from "./components/Profile/Success.js";
+import Failure from "./components/Profile/Failure.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { adminActions, userActions } from "./components/Store/index.js";
@@ -33,23 +35,19 @@ function App() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#081548",
-      }}
-    >
-      <Header selectedTab={selectedTab} handleTabChange={handleTabChange} />{" "}
+    <>
+      <Header selectedTab={selectedTab} handleTabChange={handleTabChange} />
       <section>
         <Routes>
           <Route
-            path=""
+            path="/"
             element={
               <HomePage
                 setSelectedTab={setSelectedTab}
                 handleTabChange={handleTabChange}
               />
             }
-          />{" "}
+          />
           <Route
             path="/Home"
             element={
@@ -58,7 +56,7 @@ function App() {
                 handleTabChange={handleTabChange}
               />
             }
-          />{" "}
+          />
           <Route
             path="/Movies"
             element={<Movies setSelectedTab={setSelectedTab} />}
@@ -84,6 +82,14 @@ function App() {
             element={<AdminProfile setSelectedTab={setSelectedTab} />}
           />
           <Route
+            path="/success"
+            element={<Success setSelectedTab={setSelectedTab} />}
+          />
+          <Route
+            path="/failure"
+            element={<Failure setSelectedTab={setSelectedTab} />}
+          />
+          <Route
             path="/Booking/:id"
             element={
               <Booking
@@ -94,40 +100,8 @@ function App() {
           />
         </Routes>
       </section>
-    </div>
+    </>
   );
 }
-// return (
-//   <div>
-//     <Header />
-//     <section>
-//       <Routes>
-//         <Route path="/Home" element={<HomePage />} />
-//         <Route path="/Movies" element={<Movies />} />
-//         {!isUserLoggedIn && !isAdminLoggedIn && (
-//           <>
-//             {" "}
-//             <Route path="/admin" element={<Admin />} />
-//             <Route path="/user" element={<User />} />
-//           </>
-//         )}
-//         {isUserLoggedIn && !isAdminLoggedIn && (
-//           <>
-//             {" "}
-//             <Route path="/user" element={<UserProfile />} />
-//             <Route path="/bookings/:id" element={<Booking />} />
-//           </>
-//         )}
-//         {isAdminLoggedIn && !isUserLoggedIn && (
-//           <>
-//             {" "}
-//             <Route path="/add" element={<AddMovie />} />
-//             <Route path="/admin" element={<AdminProfile />} />{" "}
-//           </>
-//         )}
-//       </Routes>
-//     </section>
-//   </div>
-// );
 
 export default App;

@@ -45,7 +45,7 @@ const AddMovie = () => {
           margin="auto"
           display={"flex"}
           flexDirection="column"
-          boxShadow={"10px 10px 20px #ccc"}
+          bgcolor={"white"}
         >
           <Typography textAlign={"center"} variant="h5" fontFamily={"verdana"}>
             Add New Movie
@@ -71,6 +71,14 @@ const AddMovie = () => {
             value={inputs.posterUrl}
             onChange={handleChange}
             name="posterUrl"
+            variant="standard"
+            margin="normal"
+          />
+          <FormLabel sx={labelProps}>Trailer URL</FormLabel>
+          <TextField
+            value={inputs.trailerUrl}
+            onChange={handleChange}
+            name="trailerUrl"
             variant="standard"
             margin="normal"
           />
@@ -101,6 +109,15 @@ const AddMovie = () => {
               Add
             </Button>
           </Box>
+
+          <FormLabel sx={labelProps}>ticketPrice</FormLabel>
+          <TextField
+            value={inputs.ticketPrice}
+            onChange={handleChange}
+            name="ticketPrice"
+            variant="standard"
+            margin="normal"
+          />
           <FormLabel sx={labelProps}>Featured</FormLabel>
           <Checkbox
             name="fetaured"

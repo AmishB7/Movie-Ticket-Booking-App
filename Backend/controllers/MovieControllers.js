@@ -8,14 +8,6 @@ const handleError = (res, err, message, status = 500) => {
   return res.status(status).json({ message });
 };
 
-/**
- * Adds a new movie to the database.
- *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @return {Promise<void>} - A promise that resolves when the movie is added successfully, or rejects with an error.
- */
 export const addMovie = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -89,14 +81,6 @@ export const addMovie = async (req, res, next) => {
   }
 };
 
-/**
- * Retrieves all movies from the database.
- *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @return {Promise<Object>} A promise that resolves to the response object with the movies data or an error message.
- */
 export const getAllMovies = async (req, res, next) => {
   try {
     const movies = await Movie.find();
@@ -109,14 +93,7 @@ export const getAllMovies = async (req, res, next) => {
   }
 };
 
-/**
- * Retrieves a movie by its ID.
- *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @return {Promise<Object>} The movie object if found, or an error response.
- */
+
 export const getMovieById = async (req, res, next) => {
   const { id } = req.params;
 

@@ -16,9 +16,11 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CryptoJS from "crypto-js";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [user, setUser] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -50,18 +52,12 @@ const UserProfile = () => {
 
   const handleDelete = (id) => {
     deleteBooking(id)
-      .then((res) => {
-        console.log("Delete Response:", res); // Log delete response
-        // Update the state to reflect the deleted booking
-        setBookings((prevBookings) =>
-          prevBookings.filter((booking) => booking._id !== id)
-        );
-        calculateTotalPrice(bookings.filter((booking) => booking._id !== id)); // Recalculate total price after deletion
-      })
+      .then(() => window.location.reload())
       .catch((err) => console.log(err));
   };
 
   const handlePurchase = () => {
+    window.location.href = "/success";
     // Generate UUID for transaction_uuid
     const uuid = uuidv4();
 
@@ -70,7 +66,10 @@ const UserProfile = () => {
 
     // Construct the form and submit it
     const form = document.createElement("form");
-    form.setAttribute("action", "https://rc-epay.esewa.com.np/api/epay/main/v2/form");
+    form.setAttribute(
+      "action",
+      "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+    );
     form.setAttribute("method", "POST");
 
     // Add each input field
@@ -84,8 +83,9 @@ const UserProfile = () => {
       product_delivery_charge: "0",
       success_url: "http://localhost:3000/success",
       failure_url: "http://localhost:3000/failure",
-      signed_field_names: "amount,tax_amount,total_amount,transaction_uuid,product_code,product_service_charge,product_delivery_charge,success_url,failure_url",
-      signature: signature
+      signed_field_names:
+        "amount,tax_amount,total_amount,transaction_uuid,product_code,product_service_charge,product_delivery_charge,success_url,failure_url",
+      signature: signature,
     };
 
     // Append each field to the form
@@ -140,7 +140,7 @@ const UserProfile = () => {
               textAlign={"center"}
               border={"1px solid #ccc"}
               borderRadius={6}
-              color={"red"}
+              color={"white"}
             >
               Name: {user.name}
             </Typography>
@@ -151,7 +151,7 @@ const UserProfile = () => {
               textAlign={"center"}
               border={"1px solid #ccc"}
               borderRadius={6}
-              color={"red"}
+              color={"white"}
             >
               Email: {user.email}
             </Typography>
@@ -234,6 +234,19 @@ const UserProfile = () => {
                 </Button>
               </Box>
             </Box>
+          </Box>
+        )}
+        {bookings.length === 0 && (
+          <Box width={"70%"} display="flex" flexDirection={"column"}>
+            <Typography
+              variant="h3"
+              fontFamily={"verdana"}
+              textAlign="center"
+              padding={2}
+              color={"red"}
+            >
+              No Bookings
+            </Typography>
           </Box>
         )}
       </Fragment>

@@ -3,17 +3,19 @@ import React, { Fragment, useEffect, useState } from "react";
 import { getAdminById } from "../../api-helpers/api-helpers";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
+
 const AdminProfile = () => {
   const [admin, setAdmin] = useState();
+
   useEffect(() => {
     getAdminById()
       .then((res) => setAdmin(res.admin))
       .catch((err) => console.log(err));
   }, []);
+
   return (
     <Box width={"100%"} display="flex">
       <Fragment>
-        {" "}
         {admin && (
           <Box
             flexDirection={"column"}
@@ -25,7 +27,6 @@ const AdminProfile = () => {
             <AccountCircleIcon
               sx={{ fontSize: "10rem", textAlign: "center", ml: 3 }}
             />
-
             <Typography
               mt={1}
               padding={1}
@@ -33,6 +34,7 @@ const AdminProfile = () => {
               textAlign={"center"}
               border={"1px solid #ccc"}
               borderRadius={6}
+              color={"#FAF9F6"}
             >
               Email: {admin.email}
             </Typography>
@@ -45,6 +47,7 @@ const AdminProfile = () => {
               fontFamily={"verdana"}
               textAlign="center"
               padding={2}
+              color={"red"}
             >
               Added Movies
             </Typography>
@@ -57,6 +60,7 @@ const AdminProfile = () => {
               <List>
                 {admin.addedMovies.map((movie, index) => (
                   <ListItem
+                    key={movie._id || index} // Add key prop here
                     sx={{
                       bgcolor: "#00d386",
                       color: "white",
