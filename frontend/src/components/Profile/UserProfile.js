@@ -15,16 +15,20 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CryptoJS from "crypto-js";
+import { v4 as uuidv4 } from 'uuid';
 
 const UserProfile = () => {
   const [bookings, setBookings] = useState([]);
   const [user, setUser] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     getUserBooking()
       .then((res) => {
         console.log("Bookings Response:", res); // Log bookings response
         setBookings(res.bookings);
+        calculateTotalPrice(res.bookings); // Calculate total price on initial load
       })
       .catch((err) => console.log(err));
 
@@ -36,6 +40,14 @@ const UserProfile = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const calculateTotalPrice = (bookings) => {
+    let total = 0;
+    bookings.forEach((booking) => {
+      total += booking.ticketPrice;
+    });
+    setTotalPrice(total);
+  };
+
   const handleDelete = (id) => {
     deleteBooking(id)
       .then((res) => {
@@ -44,8 +56,68 @@ const UserProfile = () => {
         setBookings((prevBookings) =>
           prevBookings.filter((booking) => booking._id !== id)
         );
+        calculateTotalPrice(bookings.filter((booking) => booking._id !== id)); // Recalculate total price after deletion
       })
       .catch((err) => console.log(err));
+  };
+
+  const handlePurchase = () => {
+    // Generate UUID for transaction_uuid
+    const uuid = uuidv4();
+
+    // Generate HMAC SHA-256 signature
+    const signature = generateSignature(uuid);
+
+    // Construct the form and submit it
+    const form = document.createElement("form");
+    form.setAttribute("action", "https://rc-epay.esewa.com.np/api/epay/main/v2/form");
+    form.setAttribute("method", "POST");
+
+    // Add each input field
+    const fields = {
+      amount: totalPrice.toFixed(2),
+      tax_amount: "0",
+      total_amount: totalPrice.toFixed(2),
+      transaction_uuid: uuid,
+      product_code: "EPAYTEST",
+      product_service_charge: "0",
+      product_delivery_charge: "0",
+      success_url: "http://localhost:3000/success",
+      failure_url: "http://localhost:3000/failure",
+      signed_field_names: "amount,tax_amount,total_amount,transaction_uuid,product_code,product_service_charge,product_delivery_charge,success_url,failure_url",
+      signature: signature
+    };
+
+    // Append each field to the form
+    Object.keys(fields).forEach((fieldName) => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "hidden");
+      input.setAttribute("name", fieldName);
+      input.setAttribute("value", fields[fieldName]);
+      form.appendChild(input);
+    });
+
+    // Append the form to the document and submit it
+    document.body.appendChild(form);
+    form.submit();
+  };
+
+  const generateSignature = (uuid) => {
+    const secretKey = "your_secret_key"; // Replace with your actual secret key provided by eSewa
+
+    // Construct the message to be signed based on the signed_field_names order
+    const message = `total_amount=${totalPrice},transaction_uuid=${uuid},product_code=EPAYTEST`;
+
+    // Generate HMAC SHA-256 hash using CryptoJS
+    const hash = CryptoJS.HmacSHA256(message, secretKey);
+
+    // Convert hash to Base64-encoded string as required by eSewa
+    const signature = CryptoJS.enc.Base64.stringify(hash);
+
+    console.log("Generated UUID:", uuid);
+    console.log("Generated Signature:", signature);
+
+    return signature;
   };
 
   return (
@@ -126,27 +198,13 @@ const UserProfile = () => {
                     <ListItemText
                       sx={{ margin: 1, width: "auto", textAlign: "left" }}
                     >
-                      Price: {booking.movie.ticketPrice}
+                      Price: {booking.ticketPrice}
                     </ListItemText>
                     <ListItemText
                       sx={{ margin: 1, width: "auto", textAlign: "left" }}
                     >
                       Date: {new Date(booking.date).toDateString()}
                     </ListItemText>
-                    <Button
-                      sx={{
-                        margin: 1,
-                        width: "auto",
-                        textAlign: "left",
-                        color: "blue",
-                        ":hover": {
-                          bgcolor: "#00008B",
-                          color: "white",
-                        },
-                      }}
-                    >
-                      Purchase
-                    </Button>
                     <IconButton
                       onClick={() => handleDelete(booking._id)}
                       color="error"
@@ -156,6 +214,25 @@ const UserProfile = () => {
                   </ListItem>
                 ))}
               </List>
+              <Typography
+                variant="h5"
+                textAlign="right"
+                mt={2}
+                mr={2}
+                color="blue"
+              >
+                Total Price: ${totalPrice.toFixed(2)}
+              </Typography>
+              <Box mt={2} textAlign="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: "30%" }}
+                  onClick={handlePurchase}
+                >
+                  Purchase
+                </Button>
+              </Box>
             </Box>
           </Box>
         )}

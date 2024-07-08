@@ -18,7 +18,15 @@ const bookingSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref : "User",
         required: true,
-    }
+    },
+    ticketPrice:{
+        type: Number,
+        required: true,
+    },
+    paymentStatus:{
+        type: Boolean,
+        default: false,
+    },
 });
 
 export default mongoose.model("Bookings", bookingSchema);

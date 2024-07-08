@@ -41,6 +41,7 @@ const Movies = () => {
               releaseDate={movie.releaseDate}
               trailerUrl={movie.trailerUrl}
               duration={movie.duration}
+              ticketPrice={movie.ticketPrice}
             />
           ))}
       </Box>

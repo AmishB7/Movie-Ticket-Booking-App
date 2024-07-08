@@ -14,10 +14,7 @@ This is a simple movie ticket booking application built with React and Material-
 
    ```bash
    git clone https://github.com/yourusername/movie-ticket-booking.git
-
-
-
-
+   ```
 
 1.Navigate to the project directory:
 bash
@@ -40,17 +37,6 @@ Technologies Used
 React
 Material-UI
 React Router
+
 Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes. For major changes, please open an issue first to discuss what you would like to change.
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-vbnet
-
-Feel free to modify it according to your project's specific requirements and details!
-
-
-
-p.s. backend ko baremaa lekhnu baaki cha 
-pachi lekhumla
