@@ -69,35 +69,44 @@ function App() {
             path="/User"
             element={<User setSelectedTab={setSelectedTab} />}
           />
-          <Route
-            path="/Booking"
-            element={<UserProfile setSelectedTab={setSelectedTab} />}
-          />
-          <Route
-            path="/AddMovie"
-            element={<AddMovie setSelectedTab={setSelectedTab} />}
-          />
-          <Route
-            path="/AdminProfile"
-            element={<AdminProfile setSelectedTab={setSelectedTab} />}
-          />
-          <Route
-            path="/success"
-            element={<Success setSelectedTab={setSelectedTab} />}
-          />
-          <Route
-            path="/failure"
-            element={<Failure setSelectedTab={setSelectedTab} />}
-          />
-          <Route
-            path="/Booking/:id"
-            element={
-              <Booking
-                setSelectedTab={setSelectedTab}
-                handleTabChange={handleTabChange}
+          {isUserLoggedIn && (
+            <>
+              <Route
+                path="/Booking"
+                element={<UserProfile setSelectedTab={setSelectedTab} />}
               />
-            }
-          />
+
+              <Route
+                path="/success"
+                element={<Success setSelectedTab={setSelectedTab} />}
+              />
+              <Route
+                path="/failure"
+                element={<Failure setSelectedTab={setSelectedTab} />}
+              />
+              <Route
+                path="/Booking/:id"
+                element={
+                  <Booking
+                    setSelectedTab={setSelectedTab}
+                    handleTabChange={handleTabChange}
+                  />
+                }
+              />
+            </>
+          )}
+          {isAdminLoggedIn && (
+            <>
+              <Route
+                path="/AdminProfile"
+                element={<AdminProfile setSelectedTab={setSelectedTab} />}
+              />
+              <Route
+                path="/AddMovie"
+                element={<AddMovie setSelectedTab={setSelectedTab} />}
+              />
+            </>
+          )}
         </Routes>
       </section>
     </>
