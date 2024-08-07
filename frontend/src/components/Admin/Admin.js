@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AuthForm from "../Auth/AuthForm";
 import { sendAdminAuthReq } from "../../api-helpers/api-helpers";
 import { useDispatch } from "react-redux";
@@ -6,6 +6,11 @@ import { adminActions } from "../Store";
 
 const Admin = () => {
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(true);
+  const handleClose = () => {
+    setOpen(false);
+  };
   const onResReceived = (data) => {
     console.log(data);
     dispatch(adminActions.login());
@@ -23,7 +28,9 @@ const Admin = () => {
   };
   return (
     <div>
-      <AuthForm onSubmit={getData} isAdmin={true} />
+      {open && (
+        <AuthForm onSubmit={getData} isAdmin={true} handleClose={handleClose} />
+      )}
     </div>
   );
 };
