@@ -110,7 +110,7 @@ const AddMovie = () => {
             </Button>
           </Box>
 
-          <FormLabel sx={labelProps}>ticketPrice</FormLabel>
+          <FormLabel sx={labelProps}>Ticket Price</FormLabel>
           <TextField
             value={inputs.ticketPrice}
             onChange={handleChange}
