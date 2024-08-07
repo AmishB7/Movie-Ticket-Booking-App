@@ -9,15 +9,17 @@ import {
 } from "@mui/material";
 import { Dialog } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 
 const labelStyle = { mt: 1, mb: 1 };
-const AuthForm = ({ onSubmit, isAdmin }) => {
+const AuthForm = ({ onSubmit, isAdmin, handleClose }) => {
   const [inputs, setInputs] = useState({
     name: "",
     email: "",
     password: "",
   });
   const [isSignup, setIsSignup] = useState(false);
+  const navigate = useNavigate(); 
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
@@ -27,6 +29,7 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(inputs, isSignup);
+    navigate('/');
   };
   return (
     <Dialog PaperProps={{ style: { borderRadius: 20 } }} open={true}>
@@ -36,7 +39,7 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
           padding: 1,
         }}
       >
-        <IconButton>
+        <IconButton onClick={handleClose}>
           <CloseIcon />{" "}
         </IconButton>
       </Box>
