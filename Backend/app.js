@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 // Enable CORS for all routes
 const corsOptions = {
-  origin: "http://localhost:3000", // Allow requests from localhost:3000
+  origin: "*",
 };
 
 app.use(cors(corsOptions));
