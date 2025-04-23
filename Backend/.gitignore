@@ -4,3 +4,4 @@ node_modules
 .vs_code
 log/
 uploads/
+vercel.json
