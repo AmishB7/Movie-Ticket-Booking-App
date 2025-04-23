@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import { store } from "./components/Store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-axios.defaults.baseURL = "http://localhost:5500/";
+axios.defaults.baseURL =
+  "https://movie-ticket-booking-app-server.onrender.com/";
 root.render(
   <React.StrictMode>
     <BrowserRouter>
