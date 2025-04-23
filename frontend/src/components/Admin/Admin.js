@@ -10,6 +10,7 @@ const Admin = () => {
   const [open, setOpen] = useState(true);
   const handleClose = () => {
     setOpen(false);
+    window.location.href = "/";
   };
   const onResReceived = (data) => {
     console.log(data);
